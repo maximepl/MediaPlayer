@@ -1,55 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="mediaplayer.mediaplayer.MainActivity">
+    tools:context=".MainActivity">
 
+
+    <!--Text view for the name of the app-->
+    <TextView android:text="Music Player"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textviewTitle"
+        android:textSize="35dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <!--Text view for the song title-->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="Song Title"
+        android:id="@+id/songTitle"
+        android:layout_below="@+id/textviewTitle"
+        android:layout_centerHorizontal="true"
+        android:textSize="35dp" />
+
+    <!--Image view for the song poster-->
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="300dp"
+        android:id="@+id/songPoster"
+        android:layout_below="@+id/songTitle"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/background"/>
+
+    <!--Seek bar of the current song-->
+    <SeekBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/seekBar"
+        android:layout_alignLeft="@+id/songTitle"
+        android:layout_alignStart="@+id/songTitle"
+        android:layout_alignRight="@+id/songTitle"
+        android:layout_alignEnd="@+id/songTitle"
+        android:layout_above="@+id/buttonLayout" />
+
+    <!--Time from song start-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/timeFormStart"
+        android:layout_above="@+id/seekBar"/>
+
+    <!--Time remaining-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/timeToFinish"
+        android:layout_above="@+id/seekBar"
+        android:layout_alignRight="@+id/buttonLayout"
+        android:layout_alignEnd="@+id/buttonLayout" />
+
+    <!--Song name encore? hummm?-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/songName"
+        android:layout_alignBaseline="@+id/timeFormStart"
+        android:layout_alignBottom="@+id/timeFormStart"
+        android:layout_centerHorizontal="true" />
 
     <!--Player buttons-->
     <!--METTRE LE MP3 DANS UN FOLDER RAW DANS LES RESSOURCES-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:orientation="horizontal"
+        android:id="@+id/buttonLayout"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="485dp">
 
         <Button
             android:id="@+id/btn_Rewind"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="<<" />
+            android:layout_weight="1"
+            android:text="@string/rewind" />
 
         <Button
             android:id="@+id/btn_Pause"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Pause" />
+            android:text="@string/pause" />
 
         <Button
             android:id="@+id/btn_Start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Start" />
+            android:text="@string/start" />
 
         <Button
             android:id="@+id/btn_Foward"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text=">>" />
+            android:text="@string/foward" />
     </LinearLayout>
-</RelativeLayout>
+</RelativeLayout >

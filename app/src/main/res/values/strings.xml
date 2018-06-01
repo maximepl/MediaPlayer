@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">MediaPlayer</string>
+    <string name="app_name">Media Player</string>
+    <string name="rewind"><![CDATA[<<]]></string>
+    <string name="pause">Pause</string>
+    <string name="foward"><![CDATA[>>]]></string>
+    <string name="start">Start</string>
 </resources>
