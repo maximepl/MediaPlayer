@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-
 
     <!--Text view for the name of the app-->
     <TextView android:text="Music Player"
@@ -27,13 +26,14 @@
         android:textSize="35dp" />
 
     <!--Image view for the song poster-->
+    <!--BUG AVEC UNE SOURCE D'IMAGE!!!-->
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="300dp"
         android:id="@+id/songPoster"
         android:layout_below="@+id/songTitle"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/background"/>
+        android:src="@drawable/android"/>/>
 
     <!--Seek bar of the current song-->
     <SeekBar
@@ -51,7 +51,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Small Text"
+        android:text="Time from start"
         android:id="@+id/timeFormStart"
         android:layout_above="@+id/seekBar"/>
 
@@ -60,7 +60,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Small Text"
+        android:text="Time to finish"
         android:id="@+id/timeToFinish"
         android:layout_above="@+id/seekBar"
         android:layout_alignRight="@+id/buttonLayout"
@@ -71,7 +71,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
+        android:text="Song name"
         android:id="@+id/songName"
         android:layout_alignBaseline="@+id/timeFormStart"
         android:layout_alignBottom="@+id/timeFormStart"
@@ -118,4 +118,4 @@
             android:layout_weight="1"
             android:text="@string/foward" />
     </LinearLayout>
-</RelativeLayout >
+</RelativeLayout>

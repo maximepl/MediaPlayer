@@ -1,4 +1,4 @@
-package gti785.mediaplayer;
+package gti785.spotify;
 
 import org.junit.Test;
 

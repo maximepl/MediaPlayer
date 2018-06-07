@@ -1,4 +1,5 @@
-package gti785.mediaplayer;
+package gti785.spotify;
+
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,7 +13,10 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
+import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
     private Button btnRewind,btnPause,btnStart,btnFoward;
@@ -85,12 +89,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Pausing sound",Toast.LENGTH_SHORT).show();
-                        mediaPlayer.pause();
+                mediaPlayer.pause();
                 btnPause.setEnabled(false);
                 btnStart.setEnabled(true);
             }
         });
-
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,14 +108,14 @@ public class MainActivity extends AppCompatActivity {
                     oneTimeOnly = 1;
                 }
 
-                txtTimeToFinish.setText(String.format("%d min, %d sec",
+                txtTimeToFinish.setText(String.format(Locale.CANADA, "%d min, %d sec",
                         TimeUnit.MILLISECONDS.toMinutes((long) finalTime),
                         TimeUnit.MILLISECONDS.toSeconds((long) finalTime) -
                                 TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long)
                                         finalTime)))
                 );
 
-                txtTimeFormStart.setText(String.format("%d min, %d sec",
+                txtTimeFormStart.setText(String.format(Locale.CANADA, "%d min, %d sec",
                         TimeUnit.MILLISECONDS.toMinutes((long) startTime),
                         TimeUnit.MILLISECONDS.toSeconds((long) startTime) -
                                 TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long)
@@ -130,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
     private Runnable UpdateSongTime = new Runnable() {
         public void run() {
             startTime = mediaPlayer.getCurrentPosition();
-            txtTimeFormStart.setText(String.format("%d min, %d sec",
+            txtTimeFormStart.setText(String.format(Locale.CANADA,"%d min, %d sec",
                     TimeUnit.MILLISECONDS.toMinutes((long) startTime),
                     TimeUnit.MILLISECONDS.toSeconds((long) startTime) -
                             TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.
