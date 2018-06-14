@@ -1,17 +1,21 @@
 package gti785.spotify;
 
 import android.annotation.SuppressLint;
-import android.content.res.Resources;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
+import android.graphics.PorterDuff;
 import android.media.MediaMetadataRetriever;
+import android.media.audiofx.Visualizer;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.app.Activity;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import android.widget.Button;
@@ -21,20 +25,15 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
-import android.os.Bundle;
-
-//import org.jaudiotagger.audio.AudioFile;
-//import org.jaudiotagger.audio.AudioFileIO;
 
 public class MainActivity extends AppCompatActivity {
     private ImageButton btn_Previous,btnPause, btnStart, btnNext;
+    private Button btnShuffle, btnRepeat;
     private ImageView songPoster;
     private MediaPlayer mediaPlayer = new MediaPlayer();
 
@@ -59,6 +58,11 @@ public class MainActivity extends AppCompatActivity {
 
     private Uri path;
 
+    private boolean isLooping = false;
+
+    VisualizerView mVisualizerView;
+    private Visualizer mVisualizer;
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
         btnPause = (ImageButton) findViewById(R.id.btn_Pause);
         btnStart = (ImageButton)findViewById(R.id.btn_Start);
         btnNext = (ImageButton)findViewById(R.id.btn_Next);
+        btnShuffle = (Button)findViewById(R.id.btn_shuffle);
+        btnRepeat = (Button)findViewById(R.id.btn_repeat);
+        btnNext = (ImageButton)findViewById(R.id.btn_Next);
         songPoster = (ImageView)findViewById(R.id.songPoster);
 
         txtTimeFormStart = (TextView)findViewById(R.id.timeFormStart);
@@ -84,7 +91,10 @@ public class MainActivity extends AppCompatActivity {
         txtSongName = (TextView)findViewById(R.id.songTitle);
         txtArtistName = (TextView)findViewById(R.id.artistName);
 
+        mVisualizerView = (VisualizerView) findViewById(R.id.audioVisualizer);
+
         path = Uri.parse("android.resource://" + getPackageName() + "/" + "raw/" + songNames[position].toString());
+        //String url = "http://vprbbc.streamguys.net/vprbbc24.mp3";
         try {
             mediaPlayer.setDataSource(this, path);
             mediaPlayer.prepare();
@@ -92,11 +102,13 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        //setupVisualizerFxAndUI();
+        //mVisualizer.setEnabled(true);
         setSongInfo(path);
 
         seekBar = (SeekBar)findViewById(R.id.seekBar);
         btnPause.setEnabled(false);
-        btnPause.setColorFilter(Color.GRAY);
+        btnPause.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
 
         songPoster.setOnTouchListener(new OnSwipeTouchListener(this) {
             public void onSwipeTop() {
@@ -119,6 +131,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        btnRepeat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isLooping){
+                    isLooping = false;
+                    mediaPlayer.setLooping(false);
+                    btnRepeat.getBackground().clearColorFilter();
+                } else {
+                    isLooping = true;
+                    mediaPlayer.setLooping(true);
+                    btnRepeat.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
+                }
+            }
+        });
+
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,8 +161,9 @@ public class MainActivity extends AppCompatActivity {
                 mediaPlayer.pause();
                 btnPause.setEnabled(false);
                 btnStart.setEnabled(true);
-                btnStart.setColorFilter(null);
-                btnPause.setColorFilter(Color.GRAY);
+                btnStart.getBackground().clearColorFilter();
+                btnPause.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
+                //mVisualizer.release();
             }
         });
         btnStart.setOnClickListener(new View.OnClickListener() {
@@ -164,9 +193,35 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_spotify, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == R.id.preferences) {
+            Intent i = new Intent(this, PreferencesActivity.class);
+            startActivity(i);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void preferences(View view)
+    {
+        Intent i = new Intent(this, PreferencesActivity.class);
+        startActivity(i);
+    }
 
     private String[] getAllSongName() {
-        Field fields[] = R.raw.class.getDeclaredFields() ;
+        //Field fields[] = R.raw.class.getDeclaredFields() ;
         fieldLength = fields.length;
 
         try {
@@ -201,7 +256,10 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private int playNextSong(){
+    /**
+     * Function that play the next song from the song list
+     */
+    private void playNextSong(){
         position++;
 
         if(position >= fieldLength){
@@ -221,11 +279,12 @@ public class MainActivity extends AppCompatActivity {
             setSongInfo(path);
             playSong();
         }
-
-        return position;
     }
 
-    private int playPreviousSong(){
+    /**
+     * Function that play the previous song from the song list
+     */
+    private void playPreviousSong(){
         position--;
 
         if(position <= fieldLength){
@@ -249,24 +308,31 @@ public class MainActivity extends AppCompatActivity {
             setSongInfo(path);
             playSong();
         }
-
-        return position;
     }
 
-    private String setSongInfo(Uri path){
+    /**
+     * Function that take the path of the song and use it's MetaData to set the song artist, the
+     * song title and the album art
+     *
+     * @param path
+     */
+    private void setSongInfo(Uri path){
         MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
         metaRetriever.setDataSource(this, path);
         String artist =  metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
         String title = metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
+        byte[] songPosterPicture = metaRetriever.getEmbeddedPicture();
+        Bitmap songImage = BitmapFactory.decodeByteArray(songPosterPicture, 0, songPosterPicture.length);
 
+        songPoster.setImageBitmap(songImage);
         txtSongName.setText(title);
         txtArtistName.setText(artist);
-        return artist;
     }
 
-    private String playSong(){
-        String vache = "asd";
-
+    /**
+     * Function that is used to play the current song on the client
+     */
+    private void playSong(){
         mediaPlayer.start();
 
         finalTime = mediaPlayer.getDuration();
@@ -295,9 +361,26 @@ public class MainActivity extends AppCompatActivity {
         myHandler.postDelayed(UpdateSongTime,100);
         btnPause.setEnabled(true);
         btnStart.setEnabled(false);
-        btnStart.setColorFilter(Color.GRAY);
-        btnPause.setColorFilter(null);
+        btnPause.getBackground().clearColorFilter();
+        btnStart.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
+    }
 
-        return vache;
+    private void setupVisualizerFxAndUI() {
+        int audioSessionId = mediaPlayer.getAudioSessionId();
+        Log.d("Test", "audioSessionId: " + audioSessionId);
+
+        mVisualizer = new Visualizer(mediaPlayer.getAudioSessionId());
+        /*mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]);
+        mVisualizer.setDataCaptureListener(
+                new Visualizer.OnDataCaptureListener() {
+                    public void onWaveFormDataCapture(Visualizer visualizer,
+                                                      byte[] bytes, int samplingRate) {
+                        mVisualizerView.updateVisualizer(bytes);
+                    }
+
+                    public void onFftDataCapture(Visualizer visualizer,
+                                                 byte[] bytes, int samplingRate) {
+                    }
+                }, Visualizer.getMaxCaptureRate() / 2, true, false);*/
     }
 }

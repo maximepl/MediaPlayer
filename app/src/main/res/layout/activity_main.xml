@@ -18,14 +18,30 @@
 
 
     <!--Image view for the song poster-->
-    <!--BUG AVEC UNE SOURCE D'IMAGE!!!-->
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="300dp"
         android:id="@+id/songPoster"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_below="@+id/textviewTitle"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/android"/>
+        android:layout_marginTop="-47dp"
+        android:layout_above="@+id/buttonLayout" />
+
+    <!--Visualizer View-->
+    <LinearLayout
+        android:id="@+id/visualizerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_above="@+id/artistName"
+        android:layout_below="@+id/songPoster">
+
+        <gti785.spotify.VisualizerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/audioVisualizer"/>
+
+    </LinearLayout>
 
     <!--Seek bar of the current song-->
     <SeekBar
@@ -74,14 +90,13 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Song Title"
+        android:text="Artist Name"
         android:id="@+id/artistName"
         android:layout_above="@+id/songTitle"
         android:layout_centerHorizontal="true"
         android:textSize="17sp" />
 
     <!--Player buttons-->
-    <!--METTRE LE MP3 DANS UN FOLDER RAW DANS LES RESSOURCES-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -100,6 +115,14 @@
             android:layout_weight="1"
             android:src="@android:drawable/ic_media_previous" />
 
+        <Button
+            android:id="@+id/btn_shuffle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/shuffle"
+            android:textColor="#FFFFFF"/>
+
         <ImageButton
             android:id="@+id/btn_Pause"
             android:layout_width="wrap_content"
@@ -113,6 +136,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:src="@android:drawable/ic_media_play" />
+
+        <Button
+            android:id="@+id/btn_repeat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#FFFFFF"
+            android:text="@string/repeat"/>
 
         <ImageButton
             android:id="@+id/btn_Next"
